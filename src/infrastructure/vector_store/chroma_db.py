@@ -1,0 +1,56 @@
+import chromadb
+from chromadb import Collection
+
+from src.core.ports.base_vector_store import BaseVectorStore
+from src.infrastructure.vector_store.embedding_function import EmbeddingFunction
+
+
+class ChromaDb(BaseVectorStore):
+    """
+    Concrete ChromaDB implementation of BaseVectorStore.
+    Creates or reuses a named persistent collection on first instantiation.
+    """
+
+    def __init__(
+        self,
+        collection_name: str,
+        persist_directory: str,
+        embedding_function: EmbeddingFunction,
+    ):
+        self._collection: Collection = self._resolve_collection(
+            collection_name=collection_name,
+            persist_directory=persist_directory,
+            embedding_function=embedding_function,
+        )
+
+    @staticmethod
+    def _resolve_collection(
+        collection_name: str,
+        persist_directory: str,
+        embedding_function: EmbeddingFunction,
+    ) -> Collection:
+        client = chromadb.PersistentClient(path=persist_directory)
+        existing = [col.name for col in client.list_collections()]
+
+        if collection_name in existing:
+            return client.get_collection(
+                name=collection_name,
+                embedding_function=embedding_function,
+            )
+
+        return client.create_collection(
+            name=collection_name,
+            embedding_function=embedding_function,
+        )
+
+    def add(self, documents: list, metadatas: list = None, ids: list = None) -> None:
+        self._collection.add(documents=documents, metadatas=metadatas, ids=ids)
+
+    def query(self, query_texts: list, top_k: int = 5) -> dict:
+        return self._collection.query(query_texts=query_texts, n_results=top_k)
+
+    def delete(self, ids: list) -> None:
+        self._collection.delete(ids=ids)
+
+    def update(self, ids: list, documents: list = None, metadatas: list = None) -> None:
+        self._collection.update(ids=ids, documents=documents, metadatas=metadatas)
