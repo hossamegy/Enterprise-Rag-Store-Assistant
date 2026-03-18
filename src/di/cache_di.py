@@ -29,10 +29,6 @@ def build_cache_chroma_db() -> ChromaDb:
 
 @lru_cache(maxsize=1)
 def build_cache() -> Cache:
-    """
-    Cache uses ChromaDb (a BaseVectorStore) directly.
-    VectorDbService is NOT used here – it's for product/order/user data only.
-    """
     return Cache(vector_store=build_cache_chroma_db())
 
 

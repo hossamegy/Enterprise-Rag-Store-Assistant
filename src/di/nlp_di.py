@@ -49,17 +49,6 @@ def build_local_llm_rag() -> LocalLLmImpl:
 
 @lru_cache(maxsize=1)
 def build_nlp_pipeline() -> PipelineService:
-    """
-    Builds the full NLP processing pipeline.
-
-    Layer order (Chain of Responsibility):
-      1. GetCacheLayer        – semantic cache lookup; short-circuits on hit
-      2. PreprocessingLayer   – clean / normalize Arabic text
-      3. ComplexityClassifier – simple vs complex question classification
-      4. IntentClassifier     – predict user intent (ask_price, compare, etc.)
-      5. LocalLLMLayer        – generate RAG answer via Qwen2.5
-      6. SaveCacheLayer       – persist fresh Q+A to vector cache
-    """
     settings = get_nlp_settings()
 
     intent_model = build_intent_model()
