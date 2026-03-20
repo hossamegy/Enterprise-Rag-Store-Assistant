@@ -4,16 +4,16 @@ from src.core.entities.message_context import MessageContext
 from src.application.services.pipeline_service import PipelineService
 from src.di.nlp_di import build_nlp_pipeline
 
-router = APIRouter(prefix="/chat", tags=["chat"])
+import asyncio
+chat_router = APIRouter(prefix="/chat", tags=["chat"])
 
-
-@router.post("/", summary="Send a message to the chatbot pipeline", response_model=ChatResponseDTO)
-def chat_endpoint(
+@chat_router.post("/", summary="Send a message to the chatbot pipeline", response_model=ChatResponseDTO)
+async def chat_endpoint(
     request: ChatRequestDTO,
     pipeline: PipelineService = Depends(build_nlp_pipeline),
 ):
     context = MessageContext(question=request.message)
-    processed_context = pipeline.run(context)
+    processed_context = await asyncio.to_thread(pipeline.run, context)
 
     return ChatResponseDTO(
         response=processed_context.response or "No response generated.",

@@ -1,21 +1,15 @@
-"""from fastapi import FastAPI
-from src.api.routers.vectoreDb_router import router
-from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from src.api.routers.vector_db_router import router
+from src.api.routers.chat_router import chat_router
+from src.di.nlp_di import build_nlp_pipeline
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    build_nlp_pipeline()
+    yield
 
+app = FastAPI(lifespan=lifespan)
 app.include_router(router)
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-    import torch
-"""
-import torch
-
-print(torch.cuda.is_available())
-
+app.include_router(chat_router)
 

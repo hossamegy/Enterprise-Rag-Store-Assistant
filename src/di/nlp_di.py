@@ -4,12 +4,13 @@ from src.infrastructure.nlp.classfiers.classfierModel import ClassfierModel
 from src.infrastructure.nlp.layers.complexity_classifier_layer import ComplexityClassifierLayer
 from src.infrastructure.nlp.layers.intent_classifier_layer import IntentClassifierLayer
 from src.infrastructure.nlp.layers.preprocessing_layer import PreprocessingLayer
+from src.infrastructure.nlp.layers.retrieve_context_layer import RetrieveContextLayer
 from src.infrastructure.nlp.layers.local_llm_layer import LocalLLMLayer
 from src.infrastructure.nlp.llm.local_llm import LocalLLmImpl
 from src.config.settings import get_nlp_settings
 from src.application.services.pipeline_service import PipelineService
 from src.di.cache_di import build_get_cache_layer, build_save_cache_layer
-
+from src.di.vector_store_di import build_vector_db_service
 
 @lru_cache(maxsize=1)
 def build_intent_model() -> ClassfierModel:
@@ -60,6 +61,7 @@ def build_nlp_pipeline() -> PipelineService:
         PreprocessingLayer(),
         ComplexityClassifierLayer(model=complexity_model, confidence_threshold=settings.confidence_threshold),
         IntentClassifierLayer(model=intent_model, confidence_threshold=settings.confidence_threshold),
+        RetrieveContextLayer(vector_db_service=build_vector_db_service()),
         LocalLLMLayer(model=local_llm),
         build_save_cache_layer(),
     ])

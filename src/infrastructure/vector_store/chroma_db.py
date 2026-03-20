@@ -44,10 +44,17 @@ class ChromaDb(BaseVectorStore):
         )
 
     def add(self, documents: list, metadatas: list = None, ids: list = None) -> None:
+        if ids is None:
+            import uuid
+            ids = [str(uuid.uuid4()) for _ in range(len(documents))]
         self._collection.add(documents=documents, metadatas=metadatas, ids=ids)
 
     def query(self, query_texts: list, top_k: int = 5) -> dict:
-        return self._collection.query(query_texts=query_texts, n_results=top_k)
+        count = self._collection.count()
+        if count == 0:
+            return {"documents": [[]], "metadatas": [[]], "distances": [[]]}
+        n_res = min(top_k, count)
+        return self._collection.query(query_texts=query_texts, n_results=n_res)
 
     def delete(self, ids: list) -> None:
         self._collection.delete(ids=ids)

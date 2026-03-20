@@ -24,13 +24,15 @@ class LocalLLmImpl(LocalLLM):
         model = AutoModelForCausalLM.from_pretrained(
             self.model_id,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-            device_map=self.device,
-        )
+        ).to(self.device)
+
         model.eval()
         return tokenizer, model
 
     def rag_answer(self, question_intent: str, processed_question: str, retrieved_context: str) -> str:
         messages = build_prompt(question_intent, processed_question, retrieved_context)
+       
+        print("messages",messages)
         return self.generate(messages)
 
     def generate(self, messages: list[dict]) -> str:
