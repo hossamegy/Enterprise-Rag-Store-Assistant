@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-
 @dataclass
 class MessageContext:
     question: Optional[str] = None
@@ -10,11 +9,9 @@ class MessageContext:
     question_intent: Optional[str] = None
     retrieved_context: Optional[str] = None
     response: Optional[str] = None
-
-    # Cache fields
+    retrieved_doc_ids: Optional[list] = None
     is_cached: bool = False
     cached_response: Optional[str] = None
-
     layer_outputs: dict = field(default_factory=dict)
     metadata: Optional[dict] = field(default_factory=dict)
     history: Optional[list[dict]] = field(default_factory=list)
