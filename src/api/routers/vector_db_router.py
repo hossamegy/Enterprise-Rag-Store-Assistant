@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends
 import asyncio
+from fastapi import APIRouter, Depends
+
 from src.config.logger import logger
 from src.di.vector_store_di import build_product_service, build_order_service, build_search_service
 from src.core.entities.product import Product
@@ -10,6 +11,7 @@ from src.application.services.search_service import SearchService
 from src.api.schemas import ProductDTO, OrderDTO
 from src.infrastructure.cache.cache import Cache
 from src.di.cache_di import build_cache
+
 router = APIRouter(prefix='/vector', tags=['vector'])
 
 @router.post('/products', summary='Index a product into the vector store')

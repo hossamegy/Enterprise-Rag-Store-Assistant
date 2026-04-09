@@ -7,7 +7,6 @@ from src.config.logger import logger
 
 
 class LLMUnavailableError(Exception):
-    """Raised when the Gemini API is temporarily unavailable after all retries."""
     pass
 
 class GeminiLLmImpl(LocalLLM):

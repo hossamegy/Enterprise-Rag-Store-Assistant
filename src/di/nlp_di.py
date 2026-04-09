@@ -1,5 +1,5 @@
-from functools import lru_cache
 import os
+from functools import lru_cache
 from src.infrastructure.nlp.llm.gemini_llm import GeminiLLmImpl
 from src.di.vector_store_di import build_chroma_db
 from src.infrastructure.nlp.classfiers.classfierModel import ClassfierModel

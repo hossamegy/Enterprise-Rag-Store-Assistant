@@ -1,11 +1,13 @@
-from src.config.logger import logger
-from transformers import AutoModel, AutoTokenizer
-from src.core.ports.base_classfier_model import BaseClassfierModel
-from src.core.models.classfier_model import Classifier
-from sklearn.preprocessing import LabelEncoder
+import pickle
 import torch
 import torch.nn.functional as F
-import pickle
+from sklearn.preprocessing import LabelEncoder
+from transformers import AutoModel, AutoTokenizer
+
+from src.config.logger import logger
+from src.core.ports.base_classfier_model import BaseClassfierModel
+from src.core.models.classfier_model import Classifier
+
 
 class ClassfierModel(BaseClassfierModel):
 

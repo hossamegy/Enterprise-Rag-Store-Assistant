@@ -1,11 +1,12 @@
+import asyncio
+import time
 from fastapi import APIRouter, Depends
 from src.api.schemas import ChatRequestDTO, ChatResponseDTO
 from src.core.entities.message_context import MessageContext
 from src.application.services.pipeline_service import PipelineService
 from src.di.nlp_di import build_nlp_pipeline
-import asyncio
-import time
 from src.config.logger import logger
+
 chat_router = APIRouter(prefix='/chat', tags=['chat'])
 
 @chat_router.post('/', summary='Send a message to the chatbot pipeline', response_model=ChatResponseDTO)
