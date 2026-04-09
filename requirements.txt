@@ -6,3 +6,5 @@ chromadb==1.5.2
 sentence-transformers==3.4.1
 transformers==4.45.0
 accelerate==0.26.0
+python-dotenv
+google-genai
