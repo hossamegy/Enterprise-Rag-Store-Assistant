@@ -11,6 +11,7 @@ class LocalLLMLayer(BaseLayer):
         if context.is_cached:
             context.layer_outputs['llm'] = 'SKIPPED (cache hit)'
             return context
-        context.response = self._model.rag_answer(question_intent=context.question_intent, processed_question=context.processed_question, retrieved_context=context.retrieved_context or '')
-        context.layer_outputs['llm'] = context.response
+        if context.question_complexity == 'simple':
+            context.response = self._model.rag_answer(question_intent=context.question_intent, processed_question=context.processed_question, retrieved_context=context.retrieved_context or '')
+            context.layer_outputs['llm'] = context.response
         return context
