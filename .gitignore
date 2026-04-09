@@ -171,3 +171,6 @@ logs/
 # data / models (Optional dependent on your requirements)
 data/
 models/
+_db/
+_db_cache/
+add_test_data.py
