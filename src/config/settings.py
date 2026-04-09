@@ -32,9 +32,9 @@ class NLPSettings(BaseSettings):
     question_complexity_num_classes: int = 2
     LLM_id: str = 'src/core/models/Qwen2.5-1.5B-Instruct'
     LLM_max_token: int = 256
-    confidence_threshold: float = 0.75
+    confidence_threshold: float = 0.15
 
-    gemini_llm_id: str = "gemini-3.1-flash-lite-preview"
+    gemini_llm_id: str = "gemini-2.5-flash"
     google_api_key: Optional[str] = Field(default=None, validation_alias=AliasChoices('nlp_google_api_key', 'google_api_key', 'GOOGLE_API_KEY'))
 
     model_config = SettingsConfigDict(
