@@ -1,6 +1,14 @@
+import time
 from google import genai
+from google.genai import errors as genai_errors
 from src.core.ports.local_llm import LocalLLM
 from src.core.prompts_templetes.rag_template import build_prompt
+from src.config.logger import logger
+
+
+class LLMUnavailableError(Exception):
+    """Raised when the Gemini API is temporarily unavailable after all retries."""
+    pass
 
 class GeminiLLmImpl(LocalLLM):
 
@@ -17,7 +25,7 @@ class GeminiLLmImpl(LocalLLM):
         print('messages', messages)
         return self.generate(messages)
 
-    def generate(self, messages: list[dict]) -> str:
+    def generate(self, messages: list[dict], max_retries: int = 3, base_delay: float = 2.0) -> str:
         system_instruction = ""
         contents = []
 
@@ -31,12 +39,29 @@ class GeminiLLmImpl(LocalLLM):
                     "parts": [{"text": m.get('content', '')}]
                 })
 
-        response = self.client.models.generate_content(
-            model=self.model_id,
-            config={
-                "system_instruction": system_instruction
-            },
-            contents=contents
-        )
-        return response.text
+        last_error = None
+        for attempt in range(1, max_retries + 1):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model_id,
+                    config={"system_instruction": system_instruction},
+                    contents=contents
+                )
+                return response.text
+            except genai_errors.ServerError as e:
+                last_error = e
+                is_overload = '503' in str(e) or 'UNAVAILABLE' in str(e)
+                if is_overload and attempt < max_retries:
+                    delay = base_delay * (2 ** (attempt - 1))
+                    logger.warning(
+                        f'Gemini API unavailable (attempt {attempt}/{max_retries}). '
+                        f'Retrying in {delay:.0f}s...'
+                    )
+                    time.sleep(delay)
+                else:
+                    break
+
+        raise LLMUnavailableError(
+            f'Gemini API remained unavailable after {max_retries} attempts.'
+        ) from last_error
                 
