@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector DB CRUD - Enterprise RAG Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Vector Store Management</h1>
+        <p>Manage documents and embeddings in your RAG database</p>
+        <nav style="margin-top: 1rem;">
+            <a href="index.html" class="nav-link">← Back to Chatbot</a>
+        </nav>
+    </header>
+
+    <main class="dashboard single-col">
+        <section class="card vector-section">
+            <h2>Vector Store CRUD</h2>
+            <div class="crud-controls">
+                <select id="entity-select">
+                    <option value="products">Products</option>
+                    <option value="orders">Orders</option>
+                </select>
+                <input type="text" id="entity-id" placeholder="Entity ID (e.g., 101)" />
+            </div>
+
+            <div class="crud-actions">
+                <button id="crud-get">Load Example JSON</button>
+                <button id="crud-add" class="action-btn">Add</button>
+                <button id="crud-update" class="action-btn">Update</button>
+                <button id="crud-delete" class="action-btn delete-btn">Delete</button>
+            </div>
+
+            <textarea id="entity-json" placeholder='{ "ProductId": 101, ... }' rows="8"></textarea>
+            
+            <hr />
+            <h3>Semantic Search</h3>
+            <div class="search-controls">
+                <input type="text" id="search-input" placeholder="Search vectors (e.g., 'electronics')">
+                <button id="search-btn">Search</button>
+            </div>
+
+            <pre id="crud-output" class="output-box">Results will appear here...</pre>
+        </section>
+    </main>
+
+    <script src="crud.js"></script>
+</body>
+</html>

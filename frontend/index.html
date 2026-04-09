@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise RAG Store Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Enterprise RAG Assistant</h1>
+        <p>A minimalist interface to interact with VectorStore and Chatbot</p>
+        <nav style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+            <a href="crud.html" class="nav-link">Manage Vector Database →</a>
+            <button id="clear-cache-btn" class="nav-link delete-btn" style="border:none; cursor:pointer;" onclick="clearCache()">⚠ Clear db_cache dir</button>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <section class="card chat-section">
+            <h2>Chatbot Interface</h2>
+            <div id="chat-box" class="chat-box">
+                <div class="message system-message">Hello! I am the Enterprise RAG Assistant. How can I help you today?</div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Type your message here..." autofocus>
+                <button id="send-chat-btn">Send</button>
+            </div>
+        </section>
+
+        <section class="card context-section">
+            <h2>Retrieved Context</h2>
+            <div class="metadata-bar">
+                <span id="meta-intent" class="badge bg-purple">Intent: N/A</span>
+                <span id="meta-complexity" class="badge bg-yellow">Complexity: N/A</span>
+                <span id="meta-cached" class="badge bg-blue">Cache Hit: False</span>
+                <span id="meta-time" class="badge bg-purple">Gen Time: 0s</span>
+                <span id="meta-tokens" class="badge bg-yellow">Tokens: 0</span>
+            </div>
+            <pre id="retrieved-context-box" class="output-box">Context will appear here when a message is sent...
+The model uses this context to generate a robust and highly tailored response.</pre>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
